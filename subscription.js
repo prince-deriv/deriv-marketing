@@ -40,8 +40,8 @@ const device =
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     navigator.userAgent
   )
-    ? "Mobile"
-    : "Desktop";
+    ? "mobile"
+    : "desktop";
 
 window.onload = (function () {
   var mySocket = new WebSocket(
@@ -54,8 +54,12 @@ window.onload = (function () {
       mySocket.close();
     }
     if (response.msg_type === "verify_email") {
-      window.location.href = "http://deriv.com";
+      // window.location.href = "http://deriv.com";
     }
+  };
+
+  mySocket.onopen = function (msg) {
+    console.log("Connected to Websocket");
   };
 
   var form = document.getElementsByTagName("form");
