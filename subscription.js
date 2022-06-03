@@ -36,6 +36,13 @@ const queryParams = {
   },
 };
 
+const device =
+  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  )
+    ? "Mobile"
+    : "Desktop";
+
 window.onload = (function () {
   var mySocket = new WebSocket(
     "wss://green.binaryws.com/websockets/v3?app_id=16929&l=en&brand=deriv"
@@ -99,7 +106,7 @@ window.onload = (function () {
         type: "account_opening",
         url_parameters: {
           date_first_contact: formatted_date,
-          signup_device: "desktop",
+          signup_device: device,
           utm_source: queryParams.get("utm_source"),
           utm_content: "forex-ebook",
         },
