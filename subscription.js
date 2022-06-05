@@ -43,8 +43,17 @@ const device =
     ? "mobile"
     : "desktop";
 
+const getComputedStyle = (element, style) => {
+  return element.computedStyleMap().get(style)?.value;
+};
+
+const validateEmail = (email) => {
+  const re = /\S+@\S+\.\S+/;
+  return re.test(email);
+};
+
 window.onload = (function () {
-  var mySocket = new WebSocket(
+  const mySocket = new WebSocket(
     "wss://green.binaryws.com/websockets/v3?app_id=16929&l=en&brand=deriv"
   );
 
@@ -62,10 +71,22 @@ window.onload = (function () {
     console.log("Connected to Websocket");
   };
 
-  var form = document.getElementsByTagName("form");
-  var input = document.querySelectorAll("input[type=email]")[0];
-  var button = document.querySelectorAll("button[type=submit]")[0];
-  var checkbox = document.querySelectorAll("input[type=checkbox]")[0];
+  // Check the current active form
+
+  // Desktop Section
+  const section = document.querySelectorAll("section.flex-display")[0];
+
+  // If desktop section is visible then use the first form
+  const element_index = getComputedStyle(section, "display") === "none" ? 1 : 0;
+
+  const form = document.querySelectorAll("form")[element_index];
+  const input = document.querySelectorAll("input[type=email]")[element_index];
+  const button = document.querySelectorAll("button[type=submit]")[
+    element_index
+  ];
+  const checkbox = document.querySelectorAll("input[type=checkbox]")[
+    element_index
+  ];
 
   button.disabled = true;
 
@@ -73,37 +94,33 @@ window.onload = (function () {
     button.style.opacity = "60%";
   }
 
-  var is_checked = false;
-  var is_filled = false;
+  let is_checked = false;
+  let is_filled = false;
 
-  function checkEnableButton() {
+  const checkEnableButton = () => {
     if (is_checked && is_filled) {
       button.disabled = false;
       button.style.opacity = "100%";
     }
-  }
+  };
 
   checkbox.addEventListener("change", function (event) {
     is_checked = event.target.checked;
     checkEnableButton();
   });
 
-  function validateEmail(email) {
-    var re = /\S+@\S+\.\S+/;
-    return re.test(email);
-  }
-
   input.addEventListener("change", function (event) {
     is_filled = validateEmail(event.target.value);
+
     if (is_filled) {
       checkEnableButton();
     }
   });
 
-  var date = new Date();
-  var formatted_date = date.toISOString().split("T")[0];
+  const date = new Date();
+  const formatted_date = date.toISOString().split("T")[0];
 
-  form[0].addEventListener("submit", function (e) {
+  form.addEventListener("submit", function (e) {
     mySocket.send(
       JSON.stringify({
         verify_email: input.value,
@@ -112,6 +129,7 @@ window.onload = (function () {
           date_first_contact: formatted_date,
           signup_device: device,
           utm_source: queryParams.get("utm_source"),
+          utm_campaign: queryParams.get("utm_campaign"),
           utm_content: "forex-ebook",
         },
       })
