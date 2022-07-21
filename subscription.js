@@ -96,6 +96,7 @@ window.onload = (function () {
 
   let is_checked = false;
   let is_filled = false;
+  let timer = null;
 
   const checkEnableButton = () => {
     if (is_checked && is_filled) {
@@ -109,12 +110,15 @@ window.onload = (function () {
     checkEnableButton();
   });
 
-  input.addEventListener("change", function (event) {
-    is_filled = validateEmail(event.target.value);
+  input.addEventListener("keyup", (event) => {
+    clearTimeout(timer);
 
-    if (is_filled) {
-      checkEnableButton();
-    }
+    timer = setTimeout(function () {
+      is_filled = validateEmail(event.target.value);
+      if (is_filled) {
+        checkEnableButton();
+      }
+    }, 1000);
   });
 
   const date = new Date();
