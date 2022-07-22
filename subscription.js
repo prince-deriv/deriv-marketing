@@ -110,6 +110,10 @@ window.onload = (function () {
     checkEnableButton();
   });
 
+  input.addEventListener("change", function () {
+    button.disabled = true;
+  });
+
   input.addEventListener("keyup", (event) => {
     clearTimeout(timer);
 
