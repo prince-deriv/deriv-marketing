@@ -107,11 +107,12 @@ window.onload = (function () {
 
   checkbox.addEventListener("change", function (event) {
     is_checked = event.target.checked;
-    checkEnableButton();
-  });
-
-  input.addEventListener("change", function () {
-    button.disabled = true;
+    if (is_checked) {
+      checkEnableButton();
+    } else {
+        button.disabled = true;
+        button.style.opacity = "60%";
+      };
   });
 
   input.addEventListener("keyup", (event) => {
@@ -121,7 +122,10 @@ window.onload = (function () {
       is_filled = validateEmail(event.target.value);
       if (is_filled) {
         checkEnableButton();
-      }
+      } else {
+        button.disabled = true;
+        button.style.opacity = "60%";
+      };
     }, 1000);
   });
 
