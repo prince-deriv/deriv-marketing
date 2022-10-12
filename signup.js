@@ -314,9 +314,7 @@ deriv_socket.onmessage = function (msg) {
     deriv_socket.close();
   }
   if (response.msg_type === "account_opening") {
-    console.log({
-      response,
-    });
+    // Add operation after socket response
   }
 };
 
@@ -324,19 +322,16 @@ deriv_socket.onopen = function (msg) {
   console.log("Connected to Websocket");
 };
 
-// const signup_form = document.getElementById("signup-container");
-const signup_form = document.querySelector("form");
+const signup_form = document.getElementById("signup-container");
 const email_field = signup_form.querySelector("input[type=email]");
 const submit_button = signup_form.querySelector("button[type=submit]");
 
 submit_button.addEventListener("click", () => {
   const email = email_field.value;
 
+  // Add Email Validation here
+
   const verify_email_req = getVerifyEmailRequest(email);
 
   deriv_socket.send(JSON.stringify(verify_email_req));
-
-  console.log({
-    verify_email_req,
-  });
 });
